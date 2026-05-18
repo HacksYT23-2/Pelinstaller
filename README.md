@@ -160,6 +160,55 @@ sudo systemctl restart nginx
 ```
 
 ---
+## Alpine Linux Permission Fix (500 Internal Server Error)
+
+If you receive a `500 Internal Server Error` on Alpine Linux after installing Pelican Panel, it is usually caused by Laravel log permission issues.
+
+Example error:
+
+```text
+The stream or file "/var/www/pelican/storage/logs/laravel-YYYY-MM-DD.log" could not be opened in append mode: Permission denied
+```
+
+Run the following commands:
+
+```bash
+cd /var/www/pelican
+
+rm -f storage/logs/laravel-*.log
+
+mkdir -p storage/logs bootstrap/cache storage/framework/{cache,sessions,views}
+
+chown -R nginx:nginx /var/www/pelican
+
+chmod -R 775 storage bootstrap/cache
+
+touch storage/logs/laravel-$(date +%F).log
+chown nginx:nginx storage/logs/laravel-$(date +%F).log
+chmod 664 storage/logs/laravel-$(date +%F).log
+
+rc-service php-fpm84 restart
+rc-service nginx restart
+```
+
+Also verify PHP-FPM is running as the `nginx` user:
+
+```bash
+grep -E '^(user|group|listen)' /etc/php84/php-fpm.d/www.conf
+```
+
+If it shows `user = nobody`, fix it:
+
+```bash
+sed -i 's/^user = .*/user = nginx/' /etc/php84/php-fpm.d/www.conf
+sed -i 's/^group = .*/group = nginx/' /etc/php84/php-fpm.d/www.conf
+
+rc-service php-fpm84 restart
+rc-service nginx restart
+```
+
+After applying the fix, reload the panel in your browser.
+---
 
 # 🌐 Ubuntu 26.04 PHP 8.5 Nginx Fix
 
