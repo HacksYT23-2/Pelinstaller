@@ -1,205 +1,194 @@
-# Supported Architectures
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    PELICAN PANEL AUTO INSTALLER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- x86_64 / amd64 → Supported
-- ARM64 / aarch64 → Supported
+Automatic installer for Pelican Panel and Wings daemon.
 
----
+✔ Multi-distro support
+✔ Automatic PHP setup
+✔ Automatic SSL setup
+✔ Nginx configuration
+✔ MariaDB configuration
+✔ Wings daemon installer
+✔ SELinux support
+✔ Repair utilities
 
-# Tested Providers
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REPOSITORY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-- Oracle Cloud
-- Hetzner
-- OVH
-- Contabo
-- DigitalOcean
-- Vultr
-- Proxmox VPS
-- Home Server
+GitHub Repository:
 
----
+https://github.com/HacksYT23-2/pelican-ubuntu26-installer
 
-# Security Notes
+Quick Install:
 
-This installer automatically:
+bash <(curl -s https://raw.githubusercontent.com/HacksYT23-2/pelican-ubuntu26-installer/main/install.sh)
 
-- Enables HTTPS using Let's Encrypt
-- Configures secure PHP-FPM settings
-- Removes broken PHP repositories
-- Applies SELinux permissions on RHEL-family systems
-- Sets secure file permissions for Pelican
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SUPPORTED ARCHITECTURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✔ x86_64 / amd64
+✔ ARM64 / aarch64
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SUPPORTED OPERATING SYSTEMS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✔ Ubuntu 22.04 LTS (Jammy)        → PHP 8.3 / 8.4
+✔ Ubuntu 24.04 LTS (Noble)        → PHP 8.3 / 8.4
+✔ Ubuntu 26.04 LTS                → PHP 8.5
+✔ Debian 12 Bookworm              → PHP 8.3
+✔ Debian 13 Trixie                → PHP 8.4
+✔ CentOS / RHEL / Rocky / Alma 9  → PHP 8.4
+✔ CentOS / RHEL / Rocky / Alma 10 → PHP 8.4
+✔ Fedora                          → Experimental
+✔ Alpine Linux 3.19+              → Experimental
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✔ Automatic OS detection
+✔ Automatic dependency installation
+✔ Automatic PHP repository setup
+✔ Automatic Nginx configuration
+✔ Automatic MariaDB setup
+✔ Automatic Let's Encrypt SSL
+✔ Automatic file permission fixes
+✔ SELinux compatibility
+✔ Wings daemon installer
+✔ Repair & cleanup tools
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TESTED PROVIDERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✔ Oracle Cloud
+✔ Hetzner
+✔ OVH
+✔ Contabo
+✔ DigitalOcean
+✔ Vultr
+✔ Proxmox VPS
+✔ Home Servers
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RECOMMENDED SERVER SPECS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Minimum:
+✔ 2 CPU Cores
+✔ 4GB RAM
+✔ 20GB Storage
+✔ Root Access
 
 Recommended:
+✔ 4+ CPU Cores
+✔ 8GB+ RAM
+✔ SSD Storage
+✔ Dedicated VPS or Server
 
-- Use SSH keys
-- Disable password login
-- Enable a firewall
-- Keep your server updated
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REQUIRED PORTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Ubuntu/Debian firewall example:
+✔ HTTP        → 80
+✔ HTTPS       → 443
+✔ Wings API   → 8080
+✔ Wings SFTP  → 2022
 
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-sudo ufw allow 8080/tcp
-sudo ufw enable
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CLOUDFLARE NOTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+Before installation:
 
-# Optional Ports
+✔ Set DNS records to "DNS Only"
+✔ Disable the orange cloud
+✔ Re-enable proxy after SSL finishes
 
-- HTTP → 80
-- HTTPS → 443
-- Wings API → 8080
-- Wings SFTP → 2022
+Recommended SSL Mode:
 
----
+✔ Full (Strict)
 
-# Example DNS Layout
+✘ Do NOT use Flexible SSL
 
-- panel.example.com → Pelican Panel
-- node.example.com → Wings Node
-- files.example.com → File storage
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECURITY FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+✔ HTTPS via Let's Encrypt
+✔ Secure PHP-FPM configuration
+✔ SELinux support
+✔ Correct file permissions
+✔ Broken PHP repo cleanup
+✔ Nginx repair utility
 
-# Example Cloudflare Setup
+Recommended extra security:
 
-During installation:
+✔ Use SSH keys
+✔ Disable root password login
+✔ Enable a firewall
+✔ Keep the system updated
 
-- Set DNS records to DNS Only
-- Disable the orange cloud temporarily
-- Re-enable proxy after SSL finishes
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMMON PROBLEMS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Recommended SSL mode:
+[ Cloudflare SSL Loop ]
 
-Full (Strict)
+✔ Disable Cloudflare proxy
+✔ Use Full or Full (Strict)
+✘ Do NOT use Flexible SSL
 
----
+[ Wings Offline ]
 
-# Alpine Linux Notes
-
-Alpine uses:
-
-- OpenRC instead of systemd
-- apk instead of apt/dnf
-- Different PHP package names
-
-Example commands:
-
-rc-service nginx restart
-rc-service mariadb restart
-rc-service wings start
-
----
-
-# SELinux Notes
-
-Manual SELinux fix:
-
-sudo setsebool -P httpd_can_network_connect 1
-
-sudo chcon -R -t httpd_sys_rw_content_t \
-/var/www/pelican/storage \
-/var/www/pelican/bootstrap/cache
-
----
-
-# Docker Notes
-
-Check Docker:
-
-sudo systemctl status docker
-
-Enable Docker:
-
-sudo systemctl enable --now docker
-
----
-
-# Updating Wings
-
-curl -L https://github.com/pelican-dev/wings/releases/latest/download/wings_linux_amd64 \
--o /usr/local/bin/wings
-
-chmod +x /usr/local/bin/wings
-
-sudo systemctl restart wings
-
----
-
-# Common Problems
-
-## Cloudflare SSL Loop
-
-- Disable Cloudflare proxy
-- Use Full or Full (Strict)
-- Do NOT use Flexible SSL
-
----
-
-## Wings Shows Offline
+Check:
 
 sudo systemctl status wings
 sudo journalctl -u wings -f
 
 Verify:
 
-- Port 8080 is open
-- Domain points correctly
-- SSL certificate works
+✔ Port 8080 is open
+✔ Domain points correctly
+✔ SSL certificate works
 
----
+[ MariaDB Socket Error ]
 
-## MariaDB Socket Error
+Fix:
 
 sudo systemctl enable --now mariadb
 sudo systemctl restart mariadb
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LICENSE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# Roadmap
+MIT License
 
-Planned:
+Copyright (c) 2026 Jaimston / HacksYT23-2
 
-- Automatic Docker installation
-- Firewall setup
-- Swap setup
-- Multi-node deployment
-- Backup tools
-- Uninstall tool
-- Auto updater
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify,
+merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is
+furnished to do so.
 
----
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 
-# Contributing
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DISCLAIMER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Pull requests welcome.
+This installer is provided AS-IS.
 
-Please include:
-
-- Logs
-- Distro/version
-- Installer output
-
----
-
-# Star The Repo
-
-If this installer helped you, consider starring the repo.
-
----
-
-# Credits
-
-- Pelican Panel Developers
-- Nginx
-- PHP
-- MariaDB
-- Certbot / Let's Encrypt
-
----
-
-# Disclaimer
+Always back up important data before running automated
+installation scripts.
 
 Use at your own risk.
-
-Always back up important data before running automated install scripts.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
