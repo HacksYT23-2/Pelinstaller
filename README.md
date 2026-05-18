@@ -1,194 +1,184 @@
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-                    PELICAN PANEL AUTO INSTALLER
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 🪽 Pelican Panel Auto Installer
 
-Automatic installer for Pelican Panel and Wings daemon.
+🚀 Automatic installer for Pelican Panel and Wings daemon.
 
-✔ Multi-distro support
-✔ Automatic PHP setup
-✔ Automatic SSL setup
-✔ Nginx configuration
-✔ MariaDB configuration
-✔ Wings daemon installer
-✔ SELinux support
-✔ Repair utilities
+## ✨ Features
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REPOSITORY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- ✅ Multi-distro support
+- ✅ Automatic PHP setup
+- ✅ Automatic SSL setup
+- ✅ Nginx configuration
+- ✅ MariaDB configuration
+- ✅ Wings daemon installer
+- ✅ SELinux support
+- ✅ Repair utilities
 
-GitHub Repository:
+---
+
+# 📦 Repository
+
+🌐 GitHub Repository:
 
 https://github.com/HacksYT23-2/pelican-ubuntu26-installer
 
-Quick Install:
+## ⚡ Quick Install
 
+```bash
 bash <(curl -s https://raw.githubusercontent.com/HacksYT23-2/pelican-ubuntu26-installer/main/install.sh)
+```
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SUPPORTED ARCHITECTURES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 
-✔ x86_64 / amd64
-✔ ARM64 / aarch64
+# 🐧 Supported Operating Systems
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SUPPORTED OPERATING SYSTEMS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+| OS | PHP | Status |
+|---|---|---|
+| Ubuntu 22.04 | 8.3 / 8.4 | ✅ |
+| Ubuntu 24.04 | 8.3 / 8.4 | ✅ |
+| Ubuntu 26.04 | 8.5 | ✅ |
+| Debian 12 | 8.3 | ✅ |
+| Debian 13 | 8.4 | ✅ |
+| RHEL / Rocky / Alma 9 | 8.4 | ✅ |
+| RHEL / Rocky / Alma 10 | 8.4 | ✅ |
+| Fedora | 8.4 | ⚠️ Experimental |
+| Alpine 3.19+ | 8.3 / 8.4 | ⚠️ Experimental |
 
-✔ Ubuntu 22.04 LTS (Jammy)        → PHP 8.3 / 8.4
-✔ Ubuntu 24.04 LTS (Noble)        → PHP 8.3 / 8.4
-✔ Ubuntu 26.04 LTS                → PHP 8.5
-✔ Debian 12 Bookworm              → PHP 8.3
-✔ Debian 13 Trixie                → PHP 8.4
-✔ CentOS / RHEL / Rocky / Alma 9  → PHP 8.4
-✔ CentOS / RHEL / Rocky / Alma 10 → PHP 8.4
-✔ Fedora                          → Experimental
-✔ Alpine Linux 3.19+              → Experimental
+---
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-FEATURES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ✨ Features
 
-✔ Automatic OS detection
-✔ Automatic dependency installation
-✔ Automatic PHP repository setup
-✔ Automatic Nginx configuration
-✔ Automatic MariaDB setup
-✔ Automatic Let's Encrypt SSL
-✔ Automatic file permission fixes
-✔ SELinux compatibility
-✔ Wings daemon installer
-✔ Repair & cleanup tools
+- ✅ Automatic OS detection
+- ✅ Automatic dependency installation
+- ✅ Automatic PHP repository setup
+- ✅ Automatic Nginx configuration
+- ✅ Automatic MariaDB setup
+- ✅ Automatic Let's Encrypt SSL
+- ✅ Automatic file permission fixes
+- ✅ SELinux compatibility
+- ✅ Wings daemon installer
+- ✅ Repair & cleanup tools
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-TESTED PROVIDERS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 
-✔ Oracle Cloud
-✔ Hetzner
-✔ OVH
-✔ Contabo
-✔ DigitalOcean
-✔ Vultr
-✔ Proxmox VPS
-✔ Home Servers
+# ☁️ Tested Providers
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-RECOMMENDED SERVER SPECS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- ✅ Oracle Cloud
+- ✅ Hetzner
+- ✅ OVH
+- ✅ Contabo
+- ✅ DigitalOcean
+- ✅ Vultr
+- ✅ Proxmox VPS
+- ✅ Home Servers
 
-Minimum:
-✔ 2 CPU Cores
-✔ 4GB RAM
-✔ 20GB Storage
-✔ Root Access
+---
 
-Recommended:
-✔ 4+ CPU Cores
-✔ 8GB+ RAM
-✔ SSD Storage
-✔ Dedicated VPS or Server
+# 💻 Recommended Specs
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-REQUIRED PORTS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## Minimum
 
-✔ HTTP        → 80
-✔ HTTPS       → 443
-✔ Wings API   → 8080
-✔ Wings SFTP  → 2022
+- ✅ 2 CPU Cores
+- ✅ 4GB RAM
+- ✅ 20GB Storage
+- ✅ Root Access
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CLOUDFLARE NOTES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## Recommended
+
+- ✅ 4+ CPU Cores
+- ✅ 8GB+ RAM
+- ✅ SSD Storage
+- ✅ Dedicated VPS or Server
+
+---
+
+# 🌐 Required Ports
+
+| Service | Port |
+|---|---|
+| HTTP | 80 |
+| HTTPS | 443 |
+| Wings API | 8080 |
+| Wings SFTP | 2022 |
+
+---
+
+# ☁️ Cloudflare Notes
 
 Before installation:
 
-✔ Set DNS records to "DNS Only"
-✔ Disable the orange cloud
-✔ Re-enable proxy after SSL finishes
+- ✅ Set DNS records to DNS Only
+- ✅ Disable the orange cloud
+- ✅ Re-enable proxy after SSL finishes
 
 Recommended SSL Mode:
 
-✔ Full (Strict)
+```text
+Full (Strict)
+```
 
-✘ Do NOT use Flexible SSL
+❌ Do NOT use Flexible SSL
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SECURITY FEATURES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 
-✔ HTTPS via Let's Encrypt
-✔ Secure PHP-FPM configuration
-✔ SELinux support
-✔ Correct file permissions
-✔ Broken PHP repo cleanup
-✔ Nginx repair utility
+# 🐳 Docker Notes
 
-Recommended extra security:
+Wings requires Docker.
 
-✔ Use SSH keys
-✔ Disable root password login
-✔ Enable a firewall
-✔ Keep the system updated
+Check Docker:
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-COMMON PROBLEMS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```bash
+sudo systemctl status docker
+```
 
-[ Cloudflare SSL Loop ]
+Enable Docker:
 
-✔ Disable Cloudflare proxy
-✔ Use Full or Full (Strict)
-✘ Do NOT use Flexible SSL
+```bash
+sudo systemctl enable --now docker
+```
 
-[ Wings Offline ]
+---
 
-Check:
+# ❗ Common Problems
 
+## 🌩️ Cloudflare SSL Loop
+
+- ✅ Disable Cloudflare proxy
+- ✅ Use Full or Full (Strict)
+- ❌ Do NOT use Flexible SSL
+
+## 🪽 Wings Offline
+
+```bash
 sudo systemctl status wings
 sudo journalctl -u wings -f
+```
 
 Verify:
 
-✔ Port 8080 is open
-✔ Domain points correctly
-✔ SSL certificate works
+- ✅ Port 8080 is open
+- ✅ Domain points correctly
+- ✅ SSL certificate works
 
-[ MariaDB Socket Error ]
+---
 
-Fix:
+# ⭐ Star The Repo
 
-sudo systemctl enable --now mariadb
-sudo systemctl restart mariadb
+If this installer helped you, consider starring the repo:
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-LICENSE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⭐ https://github.com/HacksYT23-2/pelican-ubuntu26-installer
+
+---
+
+# 📜 License
 
 MIT License
 
-Copyright (c) 2026 Jaimston / HacksYT23-2
+Copyright (c) 2026 Ian / HacksYT23-2
 
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without restriction,
-including without limitation the rights to use, copy, modify,
-merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is
-furnished to do so.
+---
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DISCLAIMER
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ⚠️ Disclaimer
 
 This installer is provided AS-IS.
 
-Always back up important data before running automated
-installation scripts.
-
-Use at your own risk.
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Always back up important data before running automated installation scripts.
