@@ -18,151 +18,36 @@ Perfect for:
 
 ---
 
+# 📦 Repository
+
+🌐 GitHub Repository:
+
+https://github.com/HacksYT23-2/pelican-ubuntu26-installer
+
+⚡ Quick Install:
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/HacksYT23-2/pelican-ubuntu26-installer/main/install.sh)
+```
+
+---
+
 # ✨ What This Installer Does
 
 This script automatically performs the following:
 
-## 🔍 Operating System Detection
-
-The installer automatically detects your Linux distribution and configures the correct package manager, PHP version, and service configuration.
-
-Supported package managers:
-
-- `apt`
-- `dnf`
-- `apk`
-
----
-
-## 🐘 PHP Installation & Configuration
-
-Automatically installs the correct PHP version for your OS.
-
-The installer configures:
-
-- PHP CLI
-- PHP-FPM
-- Required PHP extensions
-- PHP socket configuration
-- PHP-FPM startup services
-
-Supported PHP versions:
-
-| PHP Version | Status |
-|---|---|
-| PHP 8.3 | ✅ |
-| PHP 8.4 | ✅ |
-| PHP 8.5 | ✅ |
-
----
-
-## 🌐 Nginx Configuration
-
-The installer automatically:
-
-- Installs Nginx
-- Creates a Pelican virtual host
-- Configures PHP-FPM sockets
-- Enables the site
-- Removes default configs
-- Applies upload limits
-- Configures fastcgi settings
-- Tests the configuration automatically
-
-No manual Nginx editing required.
-
----
-
-## 🗄️ MariaDB Setup
-
-Automatically installs and configures MariaDB.
-
-The installer:
-
-- Creates the Pelican database
-- Creates the Pelican database user
-- Applies permissions
-- Flushes privileges
-- Starts and enables MariaDB
-
----
-
-## 🔒 SSL Certificates
-
-The installer automatically configures HTTPS using Let's Encrypt and Certbot.
-
-Automatic features:
-
-- SSL certificate generation
-- Nginx SSL configuration
-- HTTPS redirect support
-- Automatic certificate renewal support
-
----
-
-## 🪽 Wings Installation
-
-The installer can automatically install Wings daemon.
-
-Features:
-
-- Downloads latest Wings release
-- Creates Wings service
-- Enables startup on boot
-- Supports systemd and OpenRC
-- Configures Wings binary permissions
-
----
-
-## 🐳 Docker Support
-
-Wings requires Docker.
-
-The installer supports Docker-enabled systems and can integrate directly with Wings.
-
-Supported container environments:
-
-- Docker Engine
-- Containerized game servers
-- Docker networking
-- Docker bridge interfaces
-
----
-
-## 🔐 SELinux Support
-
-For RHEL-family systems:
-
-- CentOS
-- Rocky Linux
-- AlmaLinux
-- RHEL
-
-The installer automatically configures SELinux permissions required for Pelican Panel.
-
----
-
-## 🛠️ Repair Utilities
-
-The installer includes built-in repair tools.
-
-### Repair Web Server
-
-Automatically repairs:
-
-- Missing Nginx configs
-- Broken Nginx installs
-- Invalid Nginx configuration files
-
-### Remove Broken PHP Repositories
-
-Automatically cleans:
-
-- Broken Ondrej PPAs
-- Broken Sury repos
-- Broken Remi repositories
-
-Useful when package installs fail.
+- ✅ Detects your Linux distribution automatically
+- ✅ Installs the correct PHP version
+- ✅ Installs PHP-FPM and required extensions
+- ✅ Configures Nginx automatically
+- ✅ Creates the Pelican database
+- ✅ Configures MariaDB permissions
+- ✅ Installs SSL certificates using Let's Encrypt
+- ✅ Downloads and installs the latest Pelican Panel
+- ✅ Installs Composer dependencies
+- ✅ Installs Wings daemon
+- ✅ Applies SELinux permissions
+- ✅ Includes repair and cleanup utilities
 
 ---
 
@@ -184,43 +69,6 @@ Useful when package installs fail.
 
 ---
 
-# ⚙️ Automatic PHP Repository Handling
-
-The installer automatically configures the correct PHP repositories for your system.
-
-| OS | Repository |
-|---|---|
-| Ubuntu 22.04 | Ondrej PHP PPA |
-| Ubuntu 24.04 | Native packages |
-| Ubuntu 26.04 | Native packages |
-| Debian 12 | Native packages |
-| Debian 13 | Native packages |
-| CentOS/RHEL | Remi repository |
-| Alpine | Native apk packages |
-
----
-
-# 💻 Recommended Server Specs
-
-## 📌 Minimum Requirements
-
-- ✅ 2 CPU cores
-- ✅ 4GB RAM
-- ✅ 20GB storage
-- ✅ Root access
-- ✅ Public IPv4 address
-- ✅ Domain name
-
-## 🚀 Recommended Requirements
-
-- ✅ 4+ CPU cores
-- ✅ 8GB+ RAM
-- ✅ SSD/NVMe storage
-- ✅ Dedicated VPS or server
-- ✅ Gigabit network connection
-
----
-
 # 🌐 Required Ports
 
 | Service | Port |
@@ -229,32 +77,6 @@ The installer automatically configures the correct PHP repositories for your sys
 | HTTPS | 443 |
 | Wings API | 8080 |
 | Wings SFTP | 2022 |
-
----
-
-# ☁️ Cloudflare Notes
-
-If using Cloudflare:
-
-Before installation:
-
-- ✅ Set DNS records to DNS Only
-- ✅ Disable the orange cloud
-- ✅ Wait for DNS propagation
-
-Recommended SSL mode:
-
-```text
-Full (Strict)
-```
-
-❌ Do NOT use Flexible SSL.
-
-Flexible SSL may cause:
-
-- Redirect loops
-- SSL validation failures
-- Wings connection failures
 
 ---
 
@@ -293,71 +115,97 @@ sudo bash install.sh
 
 ---
 
-# 🔧 Example Installation Flow
+# 🔧 Permission Fixes
 
-1. Run installer
-2. Select install option
-3. Enter domain name
-4. Enter email for SSL
-5. Enter database password
-6. Wait for dependencies to install
-7. SSL certificate is generated
-8. Pelican database is created
-9. Admin account is created
-10. Wings daemon installed (optional)
+If you encounter permission problems after installation, use the appropriate commands below.
+
+## 🐧 Ubuntu / Debian Permission Fix
+
+```bash
+sudo chown -R www-data:www-data /var/www/pelican
+
+sudo chmod -R 755 \
+/var/www/pelican/storage \
+/var/www/pelican/bootstrap/cache
+```
+
+Restart services:
+
+```bash
+sudo systemctl restart php8.5-fpm
+sudo systemctl restart nginx
+```
 
 ---
 
-# 🌍 Example DNS Setup
+## 🪨 CentOS / RHEL / Rocky / AlmaLinux Permission Fix
 
-| Record Type | Name | Target |
-|---|---|---|
-| A | panel | your-server-ip |
-| A | node | your-server-ip |
+```bash
+sudo chown -R nginx:nginx /var/www/pelican
 
-Example:
+sudo chmod -R 755 \
+/var/www/pelican/storage \
+/var/www/pelican/bootstrap/cache
+
+sudo chcon -R -t httpd_sys_rw_content_t \
+/var/www/pelican/storage \
+/var/www/pelican/bootstrap/cache
+```
+
+Restart services:
+
+```bash
+sudo systemctl restart php-fpm
+sudo systemctl restart nginx
+```
+
+---
+
+# 🌐 Ubuntu 26.04 PHP 8.5 Nginx Fix
+
+If PHP downloads instead of loading, or Nginx cannot connect to PHP-FPM, run:
+
+```bash
+sudo sed -i 's|fastcgi_pass unix:/run/php/php.*-fpm.sock;|fastcgi_pass unix:/run/php/php8.5-fpm.sock;|g' \
+/etc/nginx/sites-available/pelican.conf
+```
+
+Enable Pelican config:
+
+```bash
+sudo ln -sf /etc/nginx/sites-available/pelican.conf \
+/etc/nginx/sites-enabled/pelican.conf
+```
+
+Remove default Nginx config:
+
+```bash
+sudo rm -f /etc/nginx/sites-enabled/default
+```
+
+Test Nginx:
+
+```bash
+sudo nginx -t
+```
+
+Restart services:
+
+```bash
+sudo systemctl restart php8.5-fpm
+sudo systemctl restart nginx
+```
+
+Check PHP socket:
+
+```bash
+ls /run/php/
+```
+
+Expected output:
 
 ```text
-panel.example.com -> your server IP
-node.example.com -> your server IP
-```
-
----
-
-# 🐳 Docker Commands
-
-Check Docker:
-
-```bash
-sudo systemctl status docker
-```
-
-Enable Docker:
-
-```bash
-sudo systemctl enable --now docker
-```
-
----
-
-# 🪽 Wings Commands
-
-Check Wings:
-
-```bash
-sudo systemctl status wings
-```
-
-View logs:
-
-```bash
-sudo journalctl -u wings -f
-```
-
-Restart Wings:
-
-```bash
-sudo systemctl restart wings
+php8.5-fpm.sock
 ```
 
 ---
