@@ -95,7 +95,7 @@ set_alpine_php() {
   local n="${PHP_VER/./}"
   PHP_PKG_PREFIX="php${n}"
   PHP_FPM_SVC="php-fpm${n}"
-  PHP_FPM_SOCK='127.0.0.1:9000'
+  PHP_FPM_SOCK="unix:/run/php-fpm${n}/php-fpm.sock"
 }
 
 detect_os() {
@@ -299,9 +299,27 @@ install_dependencies() {
         "$PHP_PKG_PREFIX-gd" "$PHP_PKG_PREFIX-pdo_mysql" "$PHP_PKG_PREFIX-mysqli" \
         "$PHP_PKG_PREFIX-mbstring" "$PHP_PKG_PREFIX-bcmath" "$PHP_PKG_PREFIX-xml" \
         "$PHP_PKG_PREFIX-curl" "$PHP_PKG_PREFIX-zip" "$PHP_PKG_PREFIX-intl" \
-        "$PHP_PKG_PREFIX-sqlite3" "$PHP_PKG_PREFIX-tokenizer" "$PHP_PKG_PREFIX-session" \
-        "$PHP_PKG_PREFIX-dom" "$PHP_PKG_PREFIX-openssl" "$PHP_PKG_PREFIX-phar" \
-        nginx mariadb mariadb-client curl tar unzip git certbot certbot-nginx dcron
+        "$PHP_PKG_PREFIX-sqlite3" "$PHP_PKG_PREFIX-pdo_sqlite" \
+        "$PHP_PKG_PREFIX-tokenizer" "$PHP_PKG_PREFIX-session" \
+        "$PHP_PKG_PREFIX-dom" "$PHP_PKG_PREFIX-openssl" \
+        "$PHP_PKG_PREFIX-phar" "$PHP_PKG_PREFIX-simplexml" \
+        "$PHP_PKG_PREFIX-xmlreader" "$PHP_PKG_PREFIX-xmlwriter" \
+        "$PHP_PKG_PREFIX-fileinfo" "$PHP_PKG_PREFIX-iconv" \
+        "$PHP_PKG_PREFIX-sodium" "$PHP_PKG_PREFIX-posix" \
+        nginx mariadb mariadb-client docker \
+        curl tar unzip git certbot certbot-nginx \
+        composer dcron bash sudo nano wget ca-certificates tzdata
+
+      rc-update add nginx default
+      rc-update add mariadb default
+      rc-update add "$PHP_FPM_SVC" default
+      rc-update add docker default
+      rc-update add dcron default
+
+      rc-service nginx start
+      rc-service mariadb start
+      rc-service "$PHP_FPM_SVC" start
+      rc-service docker start
       ;;
   esac
 }
