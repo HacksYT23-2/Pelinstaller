@@ -1,31 +1,42 @@
-# Pelican Ubuntu 26.04 Auto Installer
+# Pelican Panel Auto Installer
 
-Automatic installer for the latest Pelican Panel and Wings daemon on Ubuntu 26.04 LTS.
-
----
-
-## Features
-
-* Automatic Pelican Panel installation
-* Automatic Wings installation
-* PHP 8.5 setup
-* MariaDB configuration
-* Nginx configuration
-* Automatic Let's Encrypt SSL setup
-* Optimized for Ubuntu 26.04 LTS
-* One-line installation command
-* GitHub-ready deployment
+Automatic installer for the latest Pelican Panel and Wings daemon.
+Supports multiple Linux distributions with automatic OS detection.
 
 ---
 
 ## Supported Operating Systems
 
-| OS               | Supported   |
-| ---------------- | ----------- |
-| Ubuntu 26.04 LTS | ✅           |
-| Ubuntu 24.04 LTS | ⚠️ Untested |
-| Debian           | ❌           |
-| CentOS           | ❌           |
+| OS                    | Version      | PHP   | Status       |
+| --------------------- | ------------ | ----- | ------------ |
+| Ubuntu LTS            | 22.04 Jammy  | 8.3   | ✅ Supported  |
+| Ubuntu LTS            | 24.04 Noble  | 8.3   | ✅ Supported  |
+| Ubuntu LTS            | 26.04        | 8.5   | ✅ Supported  |
+| Debian                | 13 Trixie    | 8.3   | ✅ Supported  |
+| CentOS / RHEL Stream  | 9            | 8.3   | ✅ Supported  |
+| Rocky Linux           | 9            | 8.3   | ✅ Supported  |
+| AlmaLinux             | 9            | 8.3   | ✅ Supported  |
+
+> PHP repos are handled automatically per distro:
+> - Ubuntu 22.04 → Ondrej PPA
+> - Ubuntu 24.04 / 26.04 / Debian 13 → native packages
+> - CentOS / RHEL 9 → Remi repo
+
+---
+
+## Features
+
+- Automatic OS detection — no manual config needed
+- Pelican Panel installation
+- Wings daemon installation
+- PHP setup (version matched per OS)
+- MariaDB configuration
+- Nginx configuration
+- Automatic Let's Encrypt SSL
+- SELinux support for CentOS / RHEL
+- Broken PHP repo cleanup tool
+- Nginx repair tool
+- One-line install command
 
 ---
 
@@ -33,57 +44,85 @@ Automatic installer for the latest Pelican Panel and Wings daemon on Ubuntu 26.0
 
 ### Minimum
 
-* 2 CPU cores
-* 4GB RAM
-* 20GB storage
-* Root access
-* Domain name
+- 2 CPU cores
+- 4 GB RAM
+- 20 GB storage
+- Root access
+- A domain name pointed at your server
 
 ### Recommended
 
-* 4+ CPU cores
-* 8GB+ RAM
-* SSD storage
-* Dedicated server or VPS
+- 4+ CPU cores
+- 8 GB+ RAM
+- SSD storage
+- Dedicated server or VPS
+
+### Pre-install Checklist
+
+- [ ] Domain A record points to your server's public IP
+- [ ] Ports 80 and 443 are open in your firewall
+- [ ] Cloudflare proxy (orange cloud) is **disabled** during install
+- [ ] Docker is installed if you plan to use Wings
 
 ---
 
 ## Quick Install
 
-Run this command as root:
+Run as root:
 
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/HacksYT23-2/pelican-ubuntu26-installer/main/install.sh)
+```
+
+Or clone and run:
+
+```bash
+git clone https://github.com/HacksYT23-2/pelican-ubuntu26-installer.git
+cd pelican-ubuntu26-installer
+sudo bash install.sh
+```
+
+---
+
+## Installer Menu
+
+```
+1) Install Panel only
+2) Install Wings only
+3) Install Panel + Wings
+4) Repair Web Server
+5) Remove broken PHP repo/PPA
+6) Exit
 ```
 
 ---
 
 ## What The Installer Does
 
-The installer automatically:
-
-1. Updates the system
-2. Installs required dependencies
-3. Installs PHP 8.5
-4. Configures MariaDB
-5. Downloads the latest Pelican Panel
-6. Installs Composer dependencies
-7. Configures Nginx
-8. Sets file permissions
-9. Configures SSL with Certbot
-10. Installs Wings
-11. Creates the admin account
+1. Detects your OS and sets the correct PHP version
+2. Adds any required PHP repo (Ondrej PPA / Remi)
+3. Installs PHP, Nginx, MariaDB, Certbot, and other dependencies
+4. Downloads the latest Pelican Panel release
+5. Installs Composer dependencies
+6. Configures Nginx (with correct socket path per OS)
+7. Sets correct file permissions and SELinux contexts (CentOS)
+8. Obtains a Let's Encrypt SSL certificate
+9. Runs database migrations
+10. Prompts to create your admin account
+11. Optionally installs the Wings daemon
 
 ---
 
 ## Installation Prompts
 
-During installation you will be asked for:
+You will be asked for:
 
-* Domain name
-* Email address
-* Database password
-* Admin account information
+| Prompt            | Example                  |
+| ----------------- | ------------------------ |
+| Domain name       | `panel.example.com`      |
+| Email for SSL     | `you@example.com`        |
+| Database password | *(your choice)*          |
+| Admin account     | *(entered after install)*|
 
 ---
 
@@ -91,31 +130,42 @@ During installation you will be asked for:
 
 Open your browser and go to:
 
-```text
+```
 https://your-domain.com
 ```
 
 Then:
 
-1. Login to the admin panel
-2. Create a node
-3. Copy the Wings configuration command
-4. Run the command on your server
+1. Log in to the admin panel
+2. Go to **Admin → Nodes → Create Node**
+3. Copy the Wings configuration command shown
+4. Run it on your server
+5. Start Wings:
+
+```bash
+sudo systemctl enable --now wings
+```
 
 ---
 
 ## Wings Setup
 
-Example command:
+Example configure command (get the real one from your panel node page):
 
 ```bash
 sudo wings configure --panel-url https://panel.example.com --token YOUR_TOKEN --node 1
 ```
 
-Start Wings:
+Check Wings status:
 
 ```bash
-sudo systemctl enable --now wings
+sudo systemctl status wings
+```
+
+View Wings logs:
+
+```bash
+sudo journalctl -u wings -f
 ```
 
 ---
@@ -133,11 +183,50 @@ php artisan up
 
 ---
 
-## Optional Hairpin NAT Fix
+## Troubleshooting
 
-Only needed if Wings cannot connect internally.
+### SSL Certificate Failed
 
-Edit:
+- Make sure your domain's A record points to this server
+- Make sure ports 80 and 443 are open
+- Disable the Cloudflare proxy (orange cloud) during install
+- Re-run certbot manually:
+
+```bash
+certbot --nginx -d your-domain.com
+```
+
+### Permission Issues (Ubuntu / Debian)
+
+```bash
+sudo chown -R www-data:www-data /var/www/pelican
+sudo chmod -R 755 /var/www/pelican/storage /var/www/pelican/bootstrap/cache
+```
+
+### Permission Issues (CentOS / RHEL)
+
+```bash
+sudo chown -R nginx:nginx /var/www/pelican
+sudo chmod -R 755 /var/www/pelican/storage /var/www/pelican/bootstrap/cache
+sudo chcon -R -t httpd_sys_rw_content_t /var/www/pelican/storage /var/www/pelican/bootstrap/cache
+```
+
+### Nginx Won't Start
+
+Use the built-in repair option from the installer menu (option 4), or run:
+
+```bash
+nginx -t
+sudo systemctl restart nginx
+```
+
+### Broken PHP Repo
+
+Use option 5 from the installer menu to clean up any broken PHP PPA or repo files, then re-run the installer.
+
+### Hairpin NAT (Wings Can't Connect Internally)
+
+If Wings is on the same machine as the panel and can't reach it via your domain:
 
 ```bash
 sudo nano /etc/hosts
@@ -145,35 +234,11 @@ sudo nano /etc/hosts
 
 Add:
 
-```text
-192.168.1.100 panel.example.com
+```
+192.168.1.100   panel.example.com
 ```
 
-Replace:
-
-* `192.168.1.100` with your local server IP
-* `panel.example.com` with your domain
-
----
-
-## Troubleshooting
-
-### SSL Failed
-
-Make sure:
-
-* Ports 80 and 443 are open
-* Your domain points to your server
-* Cloudflare proxy is disabled during install
-
----
-
-### Permission Issues
-
-```bash
-sudo chown -R www-data:www-data /var/www/pelican
-sudo chmod -R 755 /var/www/pelican/storage /var/www/pelican/bootstrap/cache
-```
+Replace `192.168.1.xxx` with your server's local IP and `panel.example.com` with your domain.
 
 ---
 
