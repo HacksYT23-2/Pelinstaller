@@ -19,8 +19,8 @@ echo "██╔═══╝ ██╔══╝  ██║     ██║██║
 echo "██║     ███████╗███████╗██║╚██████╗██║  ██║██║ ╚████║"
 echo "╚═╝     ╚══════╝╚══════╝╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═══╝"
 echo -e "${NC}"
-echo -e "${GREEN}Pelican Panel Ubuntu 26.04 Auto Installer${NC}"
-echo -e "${YELLOW}Made for Ubuntu 26.04 + PHP 8.5${NC}"
+echo -e "${GREEN}Pelican Panel Auto Installer${NC}"
+echo -e "${YELLOW}Supports: Ubuntu 26.04 (PHP 8.5) | Debian 13 Trixie (PHP 8.3)${NC}"
 echo
 }
 
@@ -40,16 +40,42 @@ check_root() {
   fi
 }
 
+# ── OS Detection ────────────────────────────────────────────────────────────────
+detect_os() {
+  if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    OS_ID="$ID"
+    OS_CODENAME="${VERSION_CODENAME:-}"
+    OS_VERSION_ID="${VERSION_ID:-}"
+  else
+    error "Cannot detect OS. /etc/os-release not found."
+  fi
+
+  if [ "$OS_ID" = "ubuntu" ] && [ "$OS_VERSION_ID" = "26.04" ]; then
+    DISTRO="ubuntu2604"
+    PHP_VER="8.5"
+    echo -e "${GREEN}Detected: Ubuntu 26.04 → using PHP 8.5${NC}"
+  elif [ "$OS_ID" = "debian" ] && [ "$OS_CODENAME" = "trixie" ]; then
+    DISTRO="debian13"
+    PHP_VER="8.3"
+    echo -e "${GREEN}Detected: Debian 13 (Trixie) → using PHP 8.3${NC}"
+  else
+    error "Unsupported OS: $OS_ID $OS_VERSION_ID ($OS_CODENAME). Only Ubuntu 26.04 and Debian 13 Trixie are supported."
+  fi
+}
+
 banner
 check_root
+detect_os
 
+echo
 echo "What do you want to install?"
 echo
 echo "1) Install Panel only"
 echo "2) Install Wings only"
 echo "3) Install Panel + Wings"
 echo "4) Repair Nginx"
-echo "5) Remove broken Ondrej PHP PPA"
+echo "5) Remove broken PHP repo/PPA"
 echo "6) Exit"
 echo
 
@@ -65,14 +91,36 @@ read -p "Email for SSL: " EMAIL
 read -s -p "Database password: " DBPASS
 echo
 
-remove_ondrej() {
-  step "Removing broken Ondrej PHP PPA if present"
-  rm -f /etc/apt/sources.list.d/ondrej-ubuntu-php-*.list
-  rm -f /etc/apt/sources.list.d/ondrej-php*.list
-  rm -f /etc/apt/sources.list.d/ondrej-ubuntu-php-*.sources
-  rm -f /etc/apt/sources.list.d/ondrej-php*.sources
+# ── PHP repo setup ──────────────────────────────────────────────────────────────
+setup_php_repo() {
+  if [ "$DISTRO" = "ubuntu2604" ]; then
+    step "Using Ubuntu 26.04 native PHP 8.5 packages"
+
+  elif [ "$DISTRO" = "debian13" ]; then
+    step "Using Debian 13 native PHP 8.3 packages"
+    apt install -y apt-transport-https ca-certificates curl lsb-release
+  fi
 }
 
+# ── Remove broken PHP repos ─────────────────────────────────────────────────────
+remove_broken_php_repo() {
+  if [ "$DISTRO" = "ubuntu2604" ]; then
+    step "Removing broken Ondrej Ubuntu PHP PPA if present"
+    rm -f /etc/apt/sources.list.d/ondrej-ubuntu-php-*.list
+    rm -f /etc/apt/sources.list.d/ondrej-php*.list
+    rm -f /etc/apt/sources.list.d/ondrej-ubuntu-php-*.sources
+    rm -f /etc/apt/sources.list.d/ondrej-php*.sources
+
+  elif [ "$DISTRO" = "debian13" ]; then
+    step "Removing broken Sury Debian PHP repo if present"
+    rm -f /etc/apt/sources.list.d/php.list
+    rm -f /etc/apt/sources.list.d/sury-php*.list
+    rm -f /usr/share/keyrings/deb.sury.org-php.gpg
+    echo -e "${YELLOW}Sury PHP repo removed. Debian 13 native PHP 8.3 will be used instead.${NC}"
+  fi
+}
+
+# ── Nginx repair ────────────────────────────────────────────────────────────────
 repair_nginx() {
   step "Checking Nginx"
   if [ ! -f /etc/nginx/nginx.conf ]; then
@@ -88,17 +136,23 @@ repair_nginx() {
   systemctl restart nginx
 }
 
+# ── Install dependencies ────────────────────────────────────────────────────────
 install_dependencies() {
+  setup_php_repo
+
   step "Updating package list"
   apt update
 
-  step "Installing dependencies"
+  step "Installing PHP ${PHP_VER} and dependencies"
   apt install -y \
-    php8.5 php8.5-cli php8.5-fpm php8.5-gd php8.5-mysql php8.5-mbstring \
-    php8.5-bcmath php8.5-xml php8.5-curl php8.5-zip php8.5-intl php8.5-sqlite3 \
+    php${PHP_VER} php${PHP_VER}-cli php${PHP_VER}-fpm \
+    php${PHP_VER}-gd php${PHP_VER}-mysql php${PHP_VER}-mbstring \
+    php${PHP_VER}-bcmath php${PHP_VER}-xml php${PHP_VER}-curl \
+    php${PHP_VER}-zip php${PHP_VER}-intl php${PHP_VER}-sqlite3 \
     nginx mariadb-server curl tar unzip git certbot python3-certbot-nginx
 }
 
+# ── MariaDB setup ───────────────────────────────────────────────────────────────
 setup_database() {
   step "Setting up MariaDB"
   systemctl enable --now mariadb
@@ -110,6 +164,7 @@ setup_database() {
   mariadb -e "FLUSH PRIVILEGES;"
 }
 
+# ── Panel install ───────────────────────────────────────────────────────────────
 install_panel() {
   step "Installing Pelican Panel"
 
@@ -156,7 +211,7 @@ server {
 
     location ~ \.php\$ {
         fastcgi_split_path_info ^(.+\.php)(/.+)\$;
-        fastcgi_pass unix:/run/php/php8.5-fpm.sock;
+        fastcgi_pass unix:/run/php/php${PHP_VER}-fpm.sock;
         fastcgi_index index.php;
         include fastcgi_params;
         fastcgi_param PHP_VALUE "upload_max_filesize = 100M \n post_max_size=100M";
@@ -181,7 +236,7 @@ EOF
   chown -R www-data:www-data /var/www/pelican
   chmod -R 755 /var/www/pelican/storage /var/www/pelican/bootstrap/cache
 
-  systemctl enable --now php8.5-fpm
+  systemctl enable --now php${PHP_VER}-fpm
   nginx -t
   systemctl restart nginx
 
@@ -195,6 +250,7 @@ EOF
   php artisan p:user:make
 }
 
+# ── Wings install ───────────────────────────────────────────────────────────────
 install_wings() {
   step "Installing Wings"
 
@@ -228,6 +284,7 @@ EOF
   echo "Create a node in the panel, then run the Wings configure command."
 }
 
+# ── Finish ───────────────────────────────────────────────────────────────────────
 finish_message() {
   echo
   echo -e "${GREEN}Install finished!${NC}"
@@ -246,9 +303,10 @@ finish_message() {
   echo
 }
 
+# ── Main ─────────────────────────────────────────────────────────────────────────
 case "$OPTION" in
   1)
-    remove_ondrej
+    remove_broken_php_repo
     install_dependencies
     repair_nginx
     setup_database
@@ -260,7 +318,7 @@ case "$OPTION" in
     finish_message
     ;;
   3)
-    remove_ondrej
+    remove_broken_php_repo
     install_dependencies
     repair_nginx
     setup_database
@@ -272,7 +330,7 @@ case "$OPTION" in
     repair_nginx
     ;;
   5)
-    remove_ondrej
+    remove_broken_php_repo
     apt update
     ;;
   *)
