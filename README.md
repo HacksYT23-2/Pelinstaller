@@ -1,4 +1,243 @@
-# Pelican Panel Auto Installer
+---
+
+# Supported Architectures
+
+| Architecture | Status |
+|---|---|
+| x86_64 / amd64 | ✅ Supported |
+| ARM64 / aarch64 | ✅ Supported |
+
+---
+
+# Tested Providers
+
+| Provider | Status |
+|---|---|
+| Oracle Cloud | ✅ |
+| Hetzner | ✅ |
+| OVH | ✅ |
+| Contabo | ✅ |
+| DigitalOcean | ✅ |
+| Vultr | ✅ |
+| Proxmox VPS | ✅ |
+| Home Server | ✅ |
+
+---
+
+# Security Notes
+
+This installer automatically:
+
+- Enables HTTPS using Let's Encrypt
+- Configures secure PHP-FPM settings
+- Removes broken PHP repositories
+- Applies SELinux permissions on RHEL-family systems
+- Sets secure file permissions for Pelican
+
+It is still recommended to:
+
+- Use SSH keys instead of passwords
+- Disable root password login
+- Enable a firewall
+- Keep your server updated
+
+Example firewall setup (Ubuntu/Debian):
+
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw allow 8080/tcp
+sudo ufw enable
+
+---
+
+# Optional Ports
+
+| Service | Port |
+|---|---|
+| HTTP | 80 |
+| HTTPS | 443 |
+| Wings API | 8080 |
+| Wings SFTP | 2022 |
+
+---
+
+# Example DNS Layout
+
+| Subdomain | Purpose |
+|---|---|
+| panel.example.com | Pelican Panel |
+| node.example.com | Wings Node |
+| files.example.com | File storage / CDN |
+
+---
+
+# Example Cloudflare Setup
+
+During installation:
+
+- Set DNS records to DNS Only
+- Disable the orange cloud temporarily
+- Re-enable proxy after SSL finishes
+
+Recommended SSL mode:
+
+Full (Strict)
+
+---
+
+# Alpine Linux Notes
+
+Alpine uses:
+
+- OpenRC instead of systemd
+- apk instead of apt/dnf
+- Different PHP package naming
+
+Example service commands:
+
+rc-service nginx restart
+rc-service mariadb restart
+rc-service wings start
+
+---
+
+# SELinux Notes
+
+On CentOS/RHEL/Rocky/AlmaLinux, SELinux permissions are applied automatically.
+
+If needed manually:
+
+sudo setsebool -P httpd_can_network_connect 1
+
+sudo chcon -R -t httpd_sys_rw_content_t \
+/var/www/pelican/storage \
+/var/www/pelican/bootstrap/cache
+
+---
+
+# Docker Notes
+
+Wings requires Docker.
+
+Check Docker status:
+
+sudo systemctl status docker
+
+Enable Docker:
+
+sudo systemctl enable --now docker
+
+---
+
+# Updating Wings
+
+Download latest Wings binary:
+
+curl -L https://github.com/pelican-dev/wings/releases/latest/download/wings_linux_amd64 \
+-o /usr/local/bin/wings
+
+chmod +x /usr/local/bin/wings
+
+Restart Wings:
+
+sudo systemctl restart wings
+
+---
+
+# Common Problems
+
+## Cloudflare SSL Loop
+
+If you get redirect loops:
+
+- Disable Cloudflare proxy
+- Set SSL mode to:
+  - Full
+  - or Full (Strict)
+
+Do NOT use Flexible SSL.
+
+---
+
+## Wings Shows Offline
+
+Check:
+
+sudo systemctl status wings
+sudo journalctl -u wings -f
+
+Also verify:
+
+- Port 8080 is open
+- Domain points correctly
+- SSL certificate is valid
+
+---
+
+## MariaDB Socket Error
+
+ERROR 2002 (HY000)
+
+Fix:
+
+sudo systemctl enable --now mariadb
+sudo systemctl restart mariadb
+
+---
+
+# Roadmap
+
+Planned future features:
+
+- Automatic Docker installation
+- Automatic firewall configuration
+- Automatic swap setup
+- Multi-node deployment
+- Backup/restore utilities
+- Uninstall tool
+- Panel updater command
+- Auto-detect Cloudflare API
+
+---
+
+# Contributing
+
+Pull requests and fixes are welcome.
+
+If you find a bug:
+
+1. Open an issue
+2. Include logs
+3. Include distro/version
+4. Include installer output
+
+---
+
+# Star The Repo ⭐
+
+If this installer helped you, consider starring the repository.
+
+It helps more people find the project.
+
+---
+
+# Credits
+
+- Pelican Panel Developers
+- Nginx
+- PHP
+- MariaDB
+- Certbot / Let's Encrypt
+
+---
+
+# Disclaimer
+
+This installer is provided as-is.
+
+Always back up important data before running automated install scripts.
+
+Use at your own risk.# Pelican Panel Auto Installer
 
 Automatic installer for the latest Pelican Panel and Wings daemon.
 Supports multiple Linux distributions with automatic OS detection.
@@ -235,7 +474,7 @@ sudo nano /etc/hosts
 Add:
 
 ```
-192.168.1.100   panel.example.com
+192.168.1.xxx   panel.example.com
 ```
 
 Replace `192.168.1.xxx` with your server's local IP and `panel.example.com` with your domain.
