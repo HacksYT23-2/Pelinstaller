@@ -325,7 +325,7 @@ Please include:
 
 MIT License
 
-Copyright (c) 2026 Ian / HacksYT23-2
+Copyright (c) 2026 Jaimston / HacksYT23-2
 
 ---
 
