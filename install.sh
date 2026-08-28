@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+# Some root shells (e.g. 'su' without '-', or a bare root session) don't have
+# /usr/sbin on PATH, which is where nginx normally lives. sudo's secure_path
+# usually includes it, which is why 'sudo nginx -t' can work while a plain
+# 'nginx -t' inside this script fails with "command not found".
+export PATH="$PATH:/usr/local/sbin:/usr/sbin:/sbin"
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -328,17 +334,21 @@ repair_webserver() {
   step 'Repairing/checking Nginx'
   case "$PKG_MGR" in
     apt)
-      [[ -f /etc/nginx/nginx.conf ]] || { apt-get purge -y nginx nginx-common nginx-core || true; apt-get install -y nginx; }
+      if ! command -v nginx >/dev/null 2>&1; then
+        apt-get purge -y nginx nginx-common nginx-core || true
+        apt-get update
+        apt-get install -y nginx
+      fi
       rm -f /etc/nginx/sites-enabled/default
       ;;
     dnf)
-      [[ -f /etc/nginx/nginx.conf ]] || dnf reinstall -y nginx
+      command -v nginx >/dev/null 2>&1 || dnf install -y nginx
       ;;
     zypper)
-      [[ -f /etc/nginx/nginx.conf ]] || zypper --non-interactive install -y --force nginx
+      command -v nginx >/dev/null 2>&1 || zypper --non-interactive install -y --force nginx
       ;;
     apk)
-      [[ -f /etc/nginx/nginx.conf ]] || apk add --no-cache nginx
+      command -v nginx >/dev/null 2>&1 || apk add --no-cache nginx
       rm -f /etc/nginx/http.d/default.conf
       ;;
   esac
