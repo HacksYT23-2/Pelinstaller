@@ -27,8 +27,7 @@ https://github.com/HacksYT23-2/pelican-ubuntu26-installer
 ⚡ Quick Install:
 
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/HacksYT23-2/pelican-ubuntu26-installer/main/install.sh)
-```
+bash <(curl -s https://raw.githubusercontent.com/HacksYT23-2/Pelinstaller/main/install.sh)```
 
 ---
 
@@ -85,32 +84,32 @@ This script automatically performs the following:
 Run as root:
 
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/HacksYT23-2/pelican-ubuntu26-installer/main/install.sh)
-```
+bash <(curl -s https://raw.githubusercontent.com/HacksYT23-2/Pelinstaller/main/install.sh)```
 
 ---
-
-# 📦 Clone The Repository
-
-```bash
-git clone https://github.com/HacksYT23-2/pelican-ubuntu26-installer.git
-
-cd pelican-ubuntu26-installer
-
-sudo bash install.sh
-```
 
 ---
 
 # 📋 Installer Menu
 
-```text
-1) Install Panel only
-2) Install Wings only
-3) Install Panel + Wings
-4) Repair Web Server
-5) Remove broken PHP repo/PPA/module
-6) Exit
+========================================
+       Pelican Panel & Wings Installer
+========================================
+
+Detected OS: Alpine Linux
+Init system: OpenRC
+PHP version: 8.4
+
+Please select an option:
+
+  1) Install Pelican Panel + Wings
+  2) Install Pelican Panel only
+  3) Install Wings only
+  4) Configure SSL
+  5) Show installation status
+  6) Exit
+
+Select an option [1-6]:
 ```
 
 ---
